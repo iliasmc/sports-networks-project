@@ -23,7 +23,7 @@ The data are provided with authorization auf the [Deutsche Fussball Liga (DFL)](
 is licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/). You must therefore give appropriate credit
 when using this dataset by
 1) naming the *Deutsche Fußball Liga (DFL)*
-2) [citing this publication](##citation)
+2) citing this [publication](https://doi.org/10.1038/s41597-025-04505-y)
 
 ## Usage
 
