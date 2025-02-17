@@ -1,4 +1,4 @@
-# An integrated dataset of synchronized spatiotemporal and event data in elite soccer
+# An integrated dataset of spatiotemporal and event data in elite soccer
 
 This is the official repository for the paper: 
 >Bassek, M., Rein, R., Weber, H., Memmert, D. (2025). An integrated dataset of
@@ -6,20 +6,20 @@ This is the official repository for the paper:
 
 ## Project Structure
 
-- `data_processing.py`: Functions for loading and processing met data, event data, and position data.
+- `data_processing.py`: Functions for loading and processing metadata, event data, and position data.
 - `visualization.py`: Functions for visualizing the processed data.
 - `data_summary.ipynb`: Jupyter notebook to replicate the descriptive statistics and visualizations presented in the paper.
 
 ## Data Source and Characteristics
 
-- Soccer matches from the [German Bundesliga](https://www.dfl.de/de/) 1st and 2nd division 
+- Soccer matches from the [German Bundesliga](https://www.dfl.de/de/) (1st and 2nd divisions) 
 - Size: 7 full matches
-  - Official meta data (match information)
+  - Official metadata (match information)
   - Official event data.
   - Official position data captured by [TRACAB](https://tracab.com/products/tracab-technologies/)
   
 ## License
-The data are provided with authorization auf the [Deutsche Fussball Liga (DFL)](https://www.dfl.de/de/). The dataset
+The data are provided with authorization of the [Deutsche Fussball Liga (DFL)](https://www.dfl.de/de/). The dataset
 is licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/). You must therefore give appropriate credit
 when using this dataset by
 1) naming the *Deutsche Fußball Liga (DFL)*
@@ -27,7 +27,7 @@ when using this dataset by
 
 ## Usage
 
-### Data Processing and visualzaion
+### Data Processing and visualization
 
 1. Download the raw data [here](https://doi.org/10.6084/m9.figshare.28196177)
 2. Open the `data_summary.ipynb` notebook.
@@ -53,6 +53,6 @@ when using this dataset by
 ## Funding
 This project has been kindly supported by the [Institute of Exercise Training and Sport
 Informatics](https://www.dshs-koeln.de/en/institut-fuer-trainingswissenschaft-und-sportinformatik/) at the German Sport
-University Cologne under supervision of Prof. Daniel Memmert. Funding was provided by the 
-[German Research Foundation](https://www.dfg.de/en) 
-([floodlight](https://gepris.dfg.de/gepris/projekt/522904388?context=projekt&task=showDetail&id=522904388&)).
+University Cologne, under supervision of Prof. Daniel Memmert. Funding was provided by the 
+[German Research Foundation (DFG)](https://www.dfg.de/en) 
+([*floodlight*](https://gepris.dfg.de/gepris/projekt/522904388?context=projekt&task=showDetail&id=522904388&)).
