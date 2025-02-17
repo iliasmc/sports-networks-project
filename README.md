@@ -1,8 +1,8 @@
 # An integrated dataset of synchronized spatiotemporal and event data in elite soccer
 
 This is the official repository for the paper: 
->Bassek, M., Rein, R., Weber, H., Memmert, D. (2024). An integrated dataset of
-> synchronized spatiotemporal and event data in elite soccer. In submission.
+>Bassek, M., Rein, R., Weber, H., Memmert, D. (2025). An integrated dataset of
+> spatiotemporal and event data in elite soccer. *Scientific Data, 12*(1), 195. https://doi.org/10.1038/s41597-025-04505-y
 
 ## Project Structure
 
@@ -29,7 +29,7 @@ when using this dataset by
 
 ### Data Processing and visualzaion
 
-1. Download the raw data [here](LINKTOREPO)
+1. Download the raw data [here](https://doi.org/10.6084/m9.figshare.28196177)
 2. Open the `data_summary.ipynb` notebook.
 3. Define the path to your dataset directory in the `path` variable.
 4. Run the cells to load and process the data.
@@ -37,12 +37,15 @@ when using this dataset by
 
 ## Citation
 ```BibTeX
-@article{BassekDataset,
-author = {Bassek, Manuel and Rein, Robert and Weber, Henrik and Memmert,
-Daniel},
-journal = {In Submission},
-title = {An integrated dataset of synchronized spatiotemporal and event data in elite soccer},
-year = {2024}
+@article{bassek2025integrated,
+  title={An integrated dataset of spatiotemporal and event data in elite soccer},
+  author={Bassek, Manuel and Rein, Robert and Weber, Hendrik and Memmert, Daniel},
+  journal={Scientific Data},
+  volume={12},
+  number={1},
+  pages={195},
+  year={2025},
+  publisher={Nature Publishing Group UK London}
 }
 ```
 ---
