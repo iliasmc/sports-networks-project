@@ -17,8 +17,8 @@ def load_team_sheets(path):
 
 # Load Event Data
 def load_event_data(path):
-    info_files = [x for x in os.listdir(path) if "matchinformation" in x]
-    event_files = [x for x in os.listdir(path) if "events_raw" in x]
+    info_files = sorted([x for x in os.listdir(path) if "matchinformation" in x])
+    event_files = sorted([x for x in os.listdir(path) if "events_raw" in x])
     all_events = pd.DataFrame()
     for events_file, info_file in zip(event_files, info_files):
         events, _, _ = read_event_data_xml(os.path.join(path, events_file), os.path.join(path, info_file))
