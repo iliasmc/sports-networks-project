@@ -53,7 +53,7 @@ def get_match_title(match_info_file: str):
 
 # player position -> shirt numbers
 # TODO add substitutes: currently only starting lineup
-match_bayern_koln_away = {'TW': [27, 26], "LV": [40], "IVL": [4], "RV": [5], "IVR": [2], "DML": [38], "DMR": [6],
+match_bayern_koln_away = {'TW': [27], "LV": [40], "IVL": [4], "RV": [5], "IVR": [2], "DML": [38], "DMR": [6],
                           "ORM": [10], "OLM": [11], "ZO": [25], "STZ": [7]}
 match_bayern_koln_home = {'TW': [20], "LV": [14], "IVL": [24], "RV": [2], "IVR": [4], "DML": [28], "DMR": [6],
                           "ORM": [7], "OLM": [37], "ZO": [11], "STZ": [27]}
