@@ -74,15 +74,16 @@ match_dussel_klautern_guest = {'TW': [1], "LV": [20], "IVL": [2], "RV": [37], "I
 match_dussel_pauli_guest = {'DLM': [23], 'HR': [7], 'DRM': [2], 'HL': [10], 'STR': [13], 'TW': [22], 'STL': [14],
                             'IVZ': [8], 'DMZ': [20], 'IVR': [25], 'IVL': [5]}
 
+match_where_away_team_starts_on_right = "Fortuna Düsseldorf:1. FC Kaiserslautern"
 match_title_to_players = {
     "1. FC Köln:FC Bayern München": {"home": match_bayern_koln_home, "away": match_bayern_koln_away},
     "VfL Bochum 1848:Bayer 04 Leverkusen": {"away": match_bochum_leverkusen_away},
+    "Fortuna Düsseldorf:FC St. Pauli": {"away": match_dussel_pauli_guest},
+    match_where_away_team_starts_on_right: {"away": match_dussel_klautern_guest},
+    "Fortuna Düsseldorf:1. FC Nürnberg": {"home": match_dussel_nurnberg_home},
     "Fortuna Düsseldorf:SSV Jahn Regensburg": {"home": match_dussel_regensburg_home,
                                                "away": match_dussel_regensburg_away},
     "Fortuna Düsseldorf:F.C. Hansa Rostock": {"home": match_dussel_hansa_home, "away": match_dussel_hansa_guest},
-    "Fortuna Düsseldorf:1. FC Nürnberg": {"home": match_dussel_nurnberg_home},
-    "Fortuna Düsseldorf:1. FC Kaiserslautern": {"away": match_dussel_klautern_guest},
-    "Fortuna Düsseldorf:FC St. Pauli": {"away": match_dussel_pauli_guest},
 }
 
 form_4231 = '4-2-3-1'
@@ -115,19 +116,25 @@ def permute_xy(xy, formation, shirt_to_index, position_to_shirt, default_permuta
 
 
 def process_xy(xy_objects, teamsheets, match_title, formation, team="Home"):
+    if match_title != match_where_away_team_starts_on_right:
+        if team == "Home":
+            xy_objects["firstHalf"][team].rotate(180)
+        else:
+            xy_objects["secondHalf"][team].rotate(180)
+    else:
+        if team == "Away":
+            xy_objects["firstHalf"][team].rotate(180)
+        else:
+            xy_objects["secondHalf"][team].rotate(180)
+
     if formation in DEFAULT_PERMUTATIONS_PER_FORMATION.keys():
         shirt_numbers = teamsheets[team].teamsheet.jID.tolist()  # index == xID
         position_to_shirt = match_title_to_players[match_title][team.lower()]
         result = permute_xy(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
-
-        # TODO check if rotation is correct
-        xy_objects["secondHalf"][team].rotate(180)
         result += permute_xy(xy_objects["secondHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
 
         return result
 
-    # TODO check if rotation is correct
-    xy_objects["secondHalf"][team].rotate(180)
     return xy_objects["firstHalf"][team].xy.tolist() + xy_objects["secondHalf"][team].xy.tolist()
 
 
