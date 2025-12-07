@@ -53,29 +53,29 @@ def get_match_title(match_info_file: str):
 
 # player position -> shirt numbers
 # TODO add substitutes: currently only starting lineup
-match_bayern_koln_away = {'TW': [27], "LV": [40], "IVL": [4], "RV": [5], "IVR": [2], "DML": [38], "DMR": [6],
-                          "ORM": [10], "OLM": [11], "ZO": [25], "STZ": [7]}
-match_bayern_koln_home = {'TW': [20], "LV": [14], "IVL": [24], "RV": [2], "IVR": [4], "DML": [28], "DMR": [6],
-                          "ORM": [7], "OLM": [37], "ZO": [11], "STZ": [27]}
-match_bochum_leverkusen_away = {'TW': [1], "LV": [5], "IVL": [12], "RV": [30], "IVR": [4], "DML": [11], "DMR": [25],
-                                "OLM": [19], "ZO": [27], "ORM": [21], "STZ": [9]}
-match_dussel_regensburg_home = {'TW': [33], "LV": [34], "IVL": [30], "RV": [25], "IVR": [3], "DML": [29], "DMR": [31],
-                                "OLM": [7], "ZO": [9], "ORM": [11], "STZ": [10]}
-match_dussel_regensburg_away = {'TW': [1], "LV": [20], "IVL": [33], "RV": [11], "IVR": [23], "DML": [8], "DMR": [5],
-                                "OLM": [29], "ZO": [19], "ORM": [30], "STZ": [18]}
-match_dussel_hansa_home = {'TW': [33], "LV": [8], "IVL": [5], "RV": [25], "IVR": [15], "DML": [4], "DMR": [31],
-                           "OLM": [7], "ZO": [23], "ORM": [11], "STZ": [9]}
-match_dussel_hansa_guest = {'DLM': [21], 'HR': [29], 'DRM': [7], 'HL': [14], 'STR': [19], 'TW': [1], 'STL': [18],
-                            'IVZ': [34], 'DMZ': [6], 'IVR': [27], 'IVL': [5]}
-match_dussel_nurnberg_home = {'TW': [33], "LV": [8], "IVL": [5], "RV": [25], "IVR": [15], "DML": [31], "DMR": [4],
-                              "OLM": [19], "ZO": [23], "ORM": [11], "STZ": [9]}
-match_dussel_klautern_guest = {'TW': [1], "LV": [20], "IVL": [2], "RV": [37], "IVR": [32], "DML": [6], "DMR": [7],
-                               "OLM": [11], "ZO": [28], "ORM": [8], "STZ": [13]}
-match_dussel_pauli_guest = {'DLM': [23], 'HR': [7], 'DRM': [2], 'HL': [10], 'STR': [13], 'TW': [22], 'STL': [14],
-                            'IVZ': [8], 'DMZ': [20], 'IVR': [25], 'IVL': [5]}
+match_bayern_koln_away = {'TW': [27], "LV": [40], "IVL": [4], "RV": [5], "IVR": [2], "DML": [38, 8, 39], "DMR": [6],
+                          "ORM": [10, 40], "OLM": [11, 13], "ZO": [25, 22], "STZ": [7]}
+match_bayern_koln_home = {'TW': [20], "LV": [14], "IVL": [24], "RV": [2, 17], "IVR": [4], "DML": [28], "DMR": [6],
+                          "ORM": [7, 25], "OLM": [37, 3], "ZO": [11], "STZ": [27, 29]}
+match_bochum_leverkusen_away = {'TW': [1], "LV": [5], "IVL": [12], "RV": [30], "IVR": [4], "DML": [11, 23], "DMR": [25],
+                                "OLM": [19, 18], "ZO": [27], "ORM": [21], "STZ": [9]}
+match_dussel_regensburg_home = {'TW': [33], "LV": [34], "IVL": [30], "RV": [25], "IVR": [3, 5], "DML": [29],
+                                "DMR": [31], "OLM": [7, 23], "ZO": [9, 19], "ORM": [11, 14], "STZ": [10, 28]}
+match_dussel_regensburg_away = {'TW': [1], "LV": [20, 24], "IVL": [33], "RV": [11], "IVR": [23], "DML": [8], "DMR": [5],
+                                "OLM": [29, 30], "ZO": [19, 10], "ORM": [7, 26], "STZ": [18, 9]}
+match_dussel_hansa_home = {'TW': [33], "LV": [8], "IVL": [5], "RV": [25], "IVR": [15], "DML": [4, 35], "DMR": [31],
+                           "OLM": [7, 46], "ZO": [23, 29], "ORM": [11, 14], "STZ": [9, 19]}
+match_dussel_hansa_guest = {'DLM': [21], 'HR': [29, 17], 'DRM': [7], 'HL': [14, 39], 'STR': [19, 15], 'TW': [1],
+                            'STL': [18, 9], 'IVZ': [34], 'DMZ': [6], 'IVR': [27, 25], 'IVL': [5]}
+match_dussel_nurnberg_home = {'TW': [33], "LV": [8], "IVL": [5], "RV": [25], "IVR": [15], "DML": [31], "DMR": [4, 46],
+                              "OLM": [19, 34], "ZO": [23, 28], "ORM": [11, 7], "STZ": [9]}
+match_dussel_pauli_guest = {'DLM': [23], 'HR': [7], 'DRM': [2, 19], 'HL': [10, 11], 'STR': [13, 27], 'TW': [22],
+                            'STL': [14, 34], 'IVZ': [8], 'DMZ': [20, 24], 'IVR': [25], 'IVL': [5]}
+match_dussel_klautern_guest = {'TW': [1], "LV": [20, 5], "IVL": [2], "RV": [37], "IVR": [32], "DML": [6, 25],
+                               "DMR": [7], "OLM": [11, 19], "ZO": [28, 10], "ORM": [8], "STZ": [13, 27]}
 
 match_where_away_team_starts_on_right = "Fortuna Düsseldorf:1. FC Kaiserslautern"
-match_title_to_players = {
+match_title_to_players_with_subs = {
     "1. FC Köln:FC Bayern München": {"home": match_bayern_koln_home, "away": match_bayern_koln_away},
     "VfL Bochum 1848:Bayer 04 Leverkusen": {"away": match_bochum_leverkusen_away},
     "Fortuna Düsseldorf:FC St. Pauli": {"away": match_dussel_pauli_guest},
@@ -85,6 +85,20 @@ match_title_to_players = {
                                                "away": match_dussel_regensburg_away},
     "Fortuna Düsseldorf:F.C. Hansa Rostock": {"home": match_dussel_hansa_home, "away": match_dussel_hansa_guest},
 }
+
+
+def get_starting_players(players_dict):
+    result = dict()
+    for key, val in players_dict.items():
+        result[key] = dict()
+        for (team, positions) in val.items():
+            result[key][team] = dict()
+            for pos, shirts in positions.items():
+                result[key][team][pos] = [shirts[0]]
+    return result
+
+
+match_title_to_players = get_starting_players(match_title_to_players_with_subs)
 
 form_4231 = '4-2-3-1'
 form_3322 = '3-3-2-2'
