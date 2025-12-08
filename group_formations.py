@@ -1,5 +1,6 @@
 import os
 from collections import defaultdict
+from queue import Queue
 
 from floodlight.io.dfl import read_position_data_xml
 from lxml import etree
@@ -52,7 +53,6 @@ def get_match_title(match_info_file: str):
 
 
 # player position -> shirt numbers
-# TODO add substitutes: currently only starting lineup
 match_bayern_koln_away = {'TW': [27], "LV": [40], "IVL": [4], "RV": [5], "IVR": [2], "DML": [38, 8, 39], "DMR": [6],
                           "ORM": [10, 40], "OLM": [11, 13], "ZO": [25, 22], "STZ": [7]}
 match_bayern_koln_home = {'TW': [20], "LV": [14], "IVL": [24], "RV": [2, 17], "IVR": [4], "DML": [28], "DMR": [6],
@@ -129,7 +129,35 @@ def permute_xy(xy, formation, shirt_to_index, position_to_shirt, default_permuta
     return result
 
 
-def process_xy(xy_objects, teamsheets, match_title, formation, team="Home"):
+def permute_xy_with_subs(xy, formation, shirt_to_index, position_to_shirt, default_permutations=None):
+    if default_permutations is None:
+        default_permutations = DEFAULT_PERMUTATIONS_PER_FORMATION
+    positions = default_permutations[formation]
+
+    ordered_shirts = []
+    for pos in positions:
+        ordered_shirts.append(position_to_shirt[pos])
+
+    ordered_indices = [Queue() for _ in ordered_shirts]
+    for i, s in enumerate(ordered_shirts):
+        for shirt in s:
+            ordered_indices[i].put(shirt_to_index.index(shirt))
+
+    result = []
+    for row in xy:
+        new_row = []
+        for i in range(len(ordered_indices)):
+            base_index = ordered_indices[i].queue[0]
+            if row[base_index * 2] is None:
+                ordered_indices[i].get()
+                base_index = ordered_indices[i].queue[0]
+            new_row.append(row[base_index * 2])
+            new_row.append(row[base_index * 2 + 1])
+        result.append(new_row)
+    return result
+
+
+def process_xy(xy_objects, teamsheets, match_title, formation, team="Home", include_substitutes=False):
     if match_title != match_where_away_team_starts_on_right:
         if team == "Home":
             xy_objects["firstHalf"][team].rotate(180)
@@ -144,15 +172,20 @@ def process_xy(xy_objects, teamsheets, match_title, formation, team="Home"):
     if formation in DEFAULT_PERMUTATIONS_PER_FORMATION.keys():
         shirt_numbers = teamsheets[team].teamsheet.jID.tolist()  # index == xID
         position_to_shirt = match_title_to_players[match_title][team.lower()]
-        result = permute_xy(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
-        result += permute_xy(xy_objects["secondHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
+        if include_substitutes:
+            result = permute_xy_with_subs(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
+            result += permute_xy_with_subs(xy_objects["secondHalf"][team].xy, formation, shirt_numbers,
+                                           position_to_shirt)
+        else:
+            result = permute_xy(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
+            result += permute_xy(xy_objects["secondHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
 
         return result
 
     return xy_objects["firstHalf"][team].xy.tolist() + xy_objects["secondHalf"][team].xy.tolist()
 
 
-def get_xy_data_grouped_by_formation():
+def get_xy_data_grouped_by_formation(include_subs=False):
     info_files = [x for x in os.listdir(path) if "matchinformation" in x]
     position_files = [x for x in os.listdir(path) if "positions_raw" in x]
 
@@ -163,13 +196,15 @@ def get_xy_data_grouped_by_formation():
         xy_objects, _, _, teamsheets, _ = read_position_data_xml(os.path.join(path, position_file),
                                                                  os.path.join(path, info_file))
 
-        xy_home = process_xy(xy_objects, teamsheets, match_title, home_formation, team="Home")
+        xy_home = process_xy(xy_objects, teamsheets, match_title, home_formation, team="Home",
+                             include_substitutes=include_subs)
         for time_frame in xy_home:
             formations[home_formation].append(time_frame)
 
         print(f"Processed home team for match: {match_title} with lineup {home_formation}")
 
-        xy_away = process_xy(xy_objects, teamsheets, match_title, away_formation, team="Away")
+        xy_away = process_xy(xy_objects, teamsheets, match_title, away_formation, team="Away",
+                             include_substitutes=include_subs)
         for time_frame in xy_away:
             formations[away_formation].append(time_frame)
 
