@@ -86,29 +86,7 @@ DEFAULT_PERMUTATIONS_PER_FORMATION = {
 
 
 def permute_xy(xy, formation, shirt_to_index, position_to_shirt, default_permutations=None):
-    """ Permute xy data according to formation, without handling substitutes"""
-    if default_permutations is None:
-        default_permutations = DEFAULT_PERMUTATIONS_PER_FORMATION
-    positions = default_permutations[formation]
-
-    ordered_shirts = []
-    for pos in positions:
-        ordered_shirts.extend(position_to_shirt[pos])
-
-    ordered_indices = [shirt_to_index.index(s) for s in ordered_shirts]
-
-    result = []
-    for row in xy:
-        new_row = []
-        for i in range(len(ordered_indices)):
-            new_row.append(row[ordered_indices[i] * 2])
-            new_row.append(row[ordered_indices[i] * 2 + 1])
-        result.append(new_row)
-    return result
-
-
-def permute_xy_with_subs(xy, formation, shirt_to_index, position_to_shirt, default_permutations=None):
-    """ Permute xy data according to formation, handling substitutes (None values)"""
+    """ Permute xy data according to formation"""
     if default_permutations is None:
         default_permutations = DEFAULT_PERMUTATIONS_PER_FORMATION
     positions = default_permutations[formation]
@@ -153,18 +131,23 @@ def process_xy(xy_objects, teamsheets, match_title, formation, team="Home", incl
 
     if formation in DEFAULT_PERMUTATIONS_PER_FORMATION.keys():
         shirt_numbers = teamsheets[team].teamsheet.jID.tolist()  # index == xID
-        position_to_shirt = match_title_to_players_with_subs[match_title][team.lower()]
         if include_substitutes:
-            result = permute_xy_with_subs(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
-            result += permute_xy_with_subs(xy_objects["secondHalf"][team].xy, formation, shirt_numbers,
-                                           position_to_shirt)
+            position_to_shirt = match_title_to_players_with_subs[match_title][team.lower()]
         else:
-            result = permute_xy(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
-            result += permute_xy(xy_objects["secondHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
+            position_to_shirt = get_starting_players(match_title_to_players_with_subs[match_title][team.lower()])
+        result = permute_xy(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
+        result += permute_xy(xy_objects["secondHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
 
         return result
 
     return xy_objects["firstHalf"][team].xy.tolist() + xy_objects["secondHalf"][team].xy.tolist()
+
+
+def get_starting_players(players_dict):
+    result = dict()
+    for pos, shirts in players_dict.items():
+        result[pos] = [shirts[0]]
+    return result
 
 
 def get_xy_data_grouped_by_formation(include_subs=False):
