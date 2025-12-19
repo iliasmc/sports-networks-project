@@ -19,10 +19,10 @@ from scipy.ndimage import gaussian_filter
 from sklearn.decomposition import NMF
 
 
-def create_player_count_matrix(xy_data: np.ndarray, 
-                                pitch_xlim: tuple, 
-                                pitch_ylim: tuple, 
-                                bin_size: float = 5.0) -> np.ndarray:
+def create_player_count_matrix(xy_data: np.ndarray,
+                               pitch_xlim: tuple,
+                               pitch_ylim: tuple,
+                               bin_size: float = 5.0) -> np.ndarray:
     """
     Create a count matrix for a single player by counting observations in each bin.
     
@@ -44,29 +44,29 @@ def create_player_count_matrix(xy_data: np.ndarray,
     """
     x_min, x_max = pitch_xlim
     y_min, y_max = pitch_ylim
-    
+
     # Calculate number of bins
     n_bins_x = int(np.ceil((x_max - x_min) / bin_size))
     n_bins_y = int(np.ceil((y_max - y_min) / bin_size))
-    
+
     # Initialize count matrix
     count_matrix = np.zeros((n_bins_y, n_bins_x))
-    
+
     # Filter out NaN values
     valid_mask = ~np.isnan(xy_data[:, 0]) & ~np.isnan(xy_data[:, 1])
     xy_valid = xy_data[valid_mask]
-    
+
     if len(xy_valid) == 0:
         return count_matrix
-    
+
     # Calculate bin indices for each observation
     x_bins = np.clip(((xy_valid[:, 0] - x_min) / bin_size).astype(int), 0, n_bins_x - 1)
     y_bins = np.clip(((xy_valid[:, 1] - y_min) / bin_size).astype(int), 0, n_bins_y - 1)
-    
+
     # Count observations in each bin
     for x_bin, y_bin in zip(x_bins, y_bins):
         count_matrix[y_bin, x_bin] += 1
-    
+
     return count_matrix
 
 
@@ -145,37 +145,37 @@ def build_occupancy_matrix(xy_data: np.ndarray,
         Shape of the spatial grid (n_bins_y, n_bins_x).
     """
     n_players = xy_data.shape[1] // 2
-    
+
     x_min, x_max = pitch_xlim
     y_min, y_max = pitch_ylim
     n_bins_x = int(np.ceil((x_max - x_min) / bin_size))
     n_bins_y = int(np.ceil((y_max - y_min) / bin_size))
     L = n_bins_x * n_bins_y
-    
+
     X = np.zeros((n_players, L))
-    
+
     for player_idx in range(n_players):
         # Extract x, y coordinates for this player
         x_col = player_idx * 2
         y_col = player_idx * 2 + 1
         player_xy = xy_data[:, [x_col, y_col]]
-        
+
         # Create count matrix
         count_matrix = create_player_count_matrix(player_xy, pitch_xlim, pitch_ylim, bin_size)
-        
+
         # Normalize to occupancy
         occupancy_matrix = normalize_to_occupancy(count_matrix)
-        
+
         # Apply Gaussian smoothing
         smoothed_matrix = smooth_occupancy(occupancy_matrix, sigma=sigma)
-        
+
         # Flatten and store in X
         X[player_idx, :] = smoothed_matrix.flatten()
-    
+
     return X, (n_bins_y, n_bins_x)
 
 
-def fit_nmf_roles(X: np.ndarray, 
+def fit_nmf_roles(X: np.ndarray,
                   n_roles: int = 10,
                   max_iter: int = 500,
                   random_state: int = 42) -> tuple:
@@ -209,7 +209,7 @@ def fit_nmf_roles(X: np.ndarray,
     """
     # Add small epsilon to avoid zeros (required for KL divergence)
     X_safe = X + 1e-10
-    
+
     # Initialize and fit NMF with KL divergence
     model = NMF(
         n_components=n_roles,
@@ -219,13 +219,13 @@ def fit_nmf_roles(X: np.ndarray,
         max_iter=max_iter,
         random_state=random_state
     )
-    
+
     W = model.fit_transform(X_safe)
     B = model.components_
-    
+
     # Reconstruct the matrix
     X_reconstructed = W @ B
-    
+
     return W, B, X_reconstructed, model
 
 
@@ -286,15 +286,15 @@ def extract_roles(xy_data: np.ndarray,
     X, grid_shape = build_occupancy_matrix(
         xy_data, pitch_xlim, pitch_ylim, bin_size, sigma
     )
-    
+
     # Fit NMF
     W, B, X_reconstructed, model = fit_nmf_roles(
         X, n_roles, max_iter, random_state
     )
-    
+
     # Get dominant role for each player
     player_role_assignments = np.argmax(W, axis=1)
-    
+
     results = {
         'W': W,
         'B': B,
@@ -307,7 +307,7 @@ def extract_roles(xy_data: np.ndarray,
         'reconstruction_error': model.reconstruction_err_,
         'player_role_assignments': player_role_assignments
     }
-    
+
     return results
 
 

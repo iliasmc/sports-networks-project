@@ -1,9 +1,8 @@
 import os
+
 import pandas as pd
 from floodlight.io.dfl import read_position_data_xml, read_event_data_xml, read_teamsheets_from_mat_info_xml
 
-# Define the path to the dataset
-path = "C:\\Users\\ke6564\\Desktop\\Studium\\Promotion\\floodlight\\Benchmark_Dataset\\Data\\"
 
 # Load Team Sheets
 def load_team_sheets(path):
@@ -14,6 +13,7 @@ def load_team_sheets(path):
         team_sheets_combined = pd.concat([team_sheets["Home"].teamsheet, team_sheets["Away"].teamsheet])
         team_sheets_all = pd.concat([team_sheets_all, team_sheets_combined])
     return team_sheets_all
+
 
 # Load Event Data
 def load_event_data(path):
@@ -29,6 +29,7 @@ def load_event_data(path):
         all_events = pd.concat([all_events, events_fullmatch])
     return all_events
 
+
 # Load Position Data
 def load_position_data(path):
     info_files = [x for x in os.listdir(path) if "matchinformation" in x]
@@ -38,6 +39,7 @@ def load_position_data(path):
         positions, _, _, _, _ = read_position_data_xml(os.path.join(path, position_file), os.path.join(path, info_file))
         n_frames += len(positions["firstHalf"]["Home"]) + len(positions["secondHalf"]["Home"])
     return n_frames
+
 
 # Display Data Summary
 def display_data_summary(path):

@@ -9,6 +9,18 @@ path = 'data/'
 
 
 def get_lineups_and_title(match_info_file: str):
+    """
+
+    Parameters
+    ----------
+    match_info_file: str (e.g. "DFL_02_01_matchinformation_DFL-COM-000001_DFL-MAT-J03WMX.xml")
+
+    Returns
+    -------
+    home_lineup: str (e.g. "4-2-3-1")
+    away_lineup: str (e.g. "3-3-2-2")
+    match_title: str (e.g. "1. FC Köln:FC Bayern München")
+    """
     tree = etree.parse(path + str(match_info_file))
     root = tree.getroot()
     teams = root.find("MatchInformation").find("Teams")
@@ -30,29 +42,7 @@ def get_lineups_and_title(match_info_file: str):
     return home_lineup, away_lineup, root.find("MatchInformation").find("General").get("MatchTitle")
 
 
-def get_match_title(match_info_file: str):
-    tree = etree.parse(path + str(match_info_file))
-    root = tree.getroot()
-    teams = root.find("MatchInformation").find("Teams")
-    home_id = root.find("MatchInformation").find("General").get("HomeTeamId")
-    if "AwayTeamId" in root.find("MatchInformation").find("General").attrib:
-        away_id = root.find("MatchInformation").find("General").get("AwayTeamId")
-    elif "GuestTeamId" in root.find("MatchInformation").find("General").attrib:
-        away_id = root.find("MatchInformation").find("General").get("GuestTeamId")
-    else:
-        away_id = None
-
-    home_lineup, away_lineup = None, None
-    for team_info in teams:
-        if team_info.get("TeamId") == home_id:
-            home_lineup = team_info.get("LineUp")
-        elif team_info.get("TeamId") == away_id:
-            away_lineup = team_info.get("LineUp")
-
-    return home_lineup, away_lineup
-
-
-# player position -> shirt numbers
+# Mappings for 4-2-3-1 and 3-3-2-2: player position -> shirt numbers
 match_bayern_koln_away = {'TW': [27], "LV": [40], "IVL": [4], "RV": [5], "IVR": [2], "DML": [38, 8, 39], "DMR": [6],
                           "ORM": [10, 40], "OLM": [11, 13], "ZO": [25, 22], "STZ": [7]}
 match_bayern_koln_home = {'TW': [20], "LV": [14], "IVL": [24], "RV": [2, 17], "IVR": [4], "DML": [28], "DMR": [6],
