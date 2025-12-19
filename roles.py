@@ -311,7 +311,8 @@ def extract_roles(xy_data: np.ndarray,
     return results
 
 
-def get_role_heatmaps(B: np.ndarray, grid_shape: tuple) -> list:
+def get_role_heatmaps(B: np.ndarray, grid_shape: tuple, threshold: float | None = None, 
+                       top_k: int | None = None, percentile: float | None = None) -> list:
     """
     Convert the basis matrix rows to 2D heatmaps for visualization.
     
@@ -321,16 +322,39 @@ def get_role_heatmaps(B: np.ndarray, grid_shape: tuple) -> list:
         Basis matrix of shape (K, L).
     grid_shape : tuple
         Shape of the spatial grid (n_bins_y, n_bins_x).
+    threshold : float, optional
+        Absolute threshold - values below this will be set to NaN (for transparency).
+    top_k : int, optional
+        Keep only the top k highest values per heatmap, rest set to NaN.
+    percentile : float, optional
+        Keep only values above this percentile (0-100), rest set to NaN.
         
     Returns
     -------
     heatmaps : list
         List of K 2D arrays, each representing a role's spatial distribution.
+        Low values are set to NaN for transparency when using colormaps with set_bad().
     """
     n_roles = B.shape[0]
     heatmaps = []
     for k in range(n_roles):
-        heatmap = B[k, :].reshape(grid_shape)
+        heatmap = B[k, :].reshape(grid_shape).copy()
+        
+        # Apply thresholding to show only significant values
+        if top_k is not None:
+            # Keep only top_k values
+            flat = heatmap.flatten()
+            if top_k < len(flat):
+                threshold_val = np.partition(flat, -top_k)[-top_k]
+                heatmap[heatmap < threshold_val] = np.nan
+        elif percentile is not None:
+            # Keep values above percentile
+            threshold_val = np.percentile(heatmap[heatmap > 0], percentile) if np.any(heatmap > 0) else 0
+            heatmap[heatmap < threshold_val] = np.nan
+        elif threshold is not None:
+            # Use absolute threshold
+            heatmap[heatmap < threshold] = np.nan
+        
         heatmaps.append(heatmap)
     return heatmaps
 
