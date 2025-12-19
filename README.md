@@ -10,7 +10,7 @@ This repository is a modified version of https://github.com/spoho-datascience/id
 
 Files created by our team:
 
-- `group_formations.py`: Functions for grouping player positional data into the 4-2-3-1 and 3-3-2-2 formations.
+- `group_formations.py`: Functions for grouping player positional data into the planned formations (Taken from the `LineUp` parameter in the xml data).
 - `role_extraction.ipynb`: TODO.
 - `roles.py`: TODO.
 - `plot_data_by_formation.ipynb`: Visualize the results using the ETH color palette.
@@ -43,7 +43,6 @@ when using this dataset by
 
 1. Download the raw data [here](https://doi.org/10.6084/m9.figshare.28196177)
 2. Open the `plot_data_by_formation.ipynb` notebook.
-3. Run the cells to load, process, and visualize the data. Note: Running the first cells may take about 1 minute since
-   it takes a bit longer to process the data.
+3. Run the cells to load, process, and visualize the data. Note: Running the first cell (processing the data) will take about 2 minutes.
 
 ---

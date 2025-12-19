@@ -43,6 +43,7 @@ def get_lineups_and_title(match_info_file: str):
 
 
 # Mappings for 4-2-3-1 and 3-3-2-2: player position -> shirt numbers
+# This data was hard-coded for initial testing and development purposes, for later uses it could be extracted
 match_bayern_koln_away = {'TW': [27], "LV": [40], "IVL": [4], "RV": [5], "IVR": [2], "DML": [38, 8, 39], "DMR": [6],
                           "ORM": [10, 40], "OLM": [11, 13], "ZO": [25, 22], "STZ": [7]}
 match_bayern_koln_home = {'TW': [20], "LV": [14], "IVL": [24], "RV": [2, 17], "IVR": [4], "DML": [28], "DMR": [6],
@@ -64,7 +65,9 @@ match_dussel_pauli_guest = {'DLM': [23], 'HR': [7], 'DRM': [2, 19], 'HL': [10, 1
 match_dussel_klautern_guest = {'TW': [1], "LV": [20, 5], "IVL": [2], "RV": [37], "IVR": [32], "DML": [6, 25],
                                "DMR": [7], "OLM": [11, 19], "ZO": [28, 10], "ORM": [8], "STZ": [13, 27]}
 
+# All home teams start on the right side, all away teams on the left side, except for this match:
 match_where_away_team_starts_on_right = "Fortuna Düsseldorf:1. FC Kaiserslautern"
+
 match_title_to_players_with_subs = {
     "1. FC Köln:FC Bayern München": {"home": match_bayern_koln_home, "away": match_bayern_koln_away},
     "VfL Bochum 1848:Bayer 04 Leverkusen": {"away": match_bochum_leverkusen_away},
@@ -76,29 +79,14 @@ match_title_to_players_with_subs = {
     "Fortuna Düsseldorf:F.C. Hansa Rostock": {"home": match_dussel_hansa_home, "away": match_dussel_hansa_guest},
 }
 
-
-def get_starting_players(players_dict):
-    result = dict()
-    for key, val in players_dict.items():
-        result[key] = dict()
-        for (team, positions) in val.items():
-            result[key][team] = dict()
-            for pos, shirts in positions.items():
-                result[key][team][pos] = [shirts[0]]
-    return result
-
-
-match_title_to_players = get_starting_players(match_title_to_players_with_subs)
-
-form_4231 = '4-2-3-1'
-form_3322 = '3-3-2-2'
 DEFAULT_PERMUTATIONS_PER_FORMATION = {
-    form_4231: ["TW", "LV", "IVL", "RV", "IVR", "DML", "DMR", "ORM", "OLM", "ZO", "STZ"],
-    form_3322: ['TW', 'IVL', 'IVZ', 'IVR', 'DLM', 'DMZ', 'DRM', 'HL', 'HR', 'STL', 'STR'],
+    '4-2-3-1': ["TW", "LV", "IVL", "RV", "IVR", "DML", "DMR", "ORM", "OLM", "ZO", "STZ"],
+    '3-3-2-2': ['TW', 'IVL', 'IVZ', 'IVR', 'DLM', 'DMZ', 'DRM', 'HL', 'HR', 'STL', 'STR'],
 }
 
 
 def permute_xy(xy, formation, shirt_to_index, position_to_shirt, default_permutations=None):
+    """ Permute xy data according to formation, without handling substitutes"""
     if default_permutations is None:
         default_permutations = DEFAULT_PERMUTATIONS_PER_FORMATION
     positions = default_permutations[formation]
@@ -120,6 +108,7 @@ def permute_xy(xy, formation, shirt_to_index, position_to_shirt, default_permuta
 
 
 def permute_xy_with_subs(xy, formation, shirt_to_index, position_to_shirt, default_permutations=None):
+    """ Permute xy data according to formation, handling substitutes (None values)"""
     if default_permutations is None:
         default_permutations = DEFAULT_PERMUTATIONS_PER_FORMATION
     positions = default_permutations[formation]
@@ -148,6 +137,9 @@ def permute_xy_with_subs(xy, formation, shirt_to_index, position_to_shirt, defau
 
 
 def process_xy(xy_objects, teamsheets, match_title, formation, team="Home", include_substitutes=False):
+    """
+    Make xy uniform by rotating coordinates and permuting according to formation
+    """
     if match_title != match_where_away_team_starts_on_right:
         if team == "Home":
             xy_objects["firstHalf"][team].rotate(180)
@@ -161,7 +153,7 @@ def process_xy(xy_objects, teamsheets, match_title, formation, team="Home", incl
 
     if formation in DEFAULT_PERMUTATIONS_PER_FORMATION.keys():
         shirt_numbers = teamsheets[team].teamsheet.jID.tolist()  # index == xID
-        position_to_shirt = match_title_to_players[match_title][team.lower()]
+        position_to_shirt = match_title_to_players_with_subs[match_title][team.lower()]
         if include_substitutes:
             result = permute_xy_with_subs(xy_objects["firstHalf"][team].xy, formation, shirt_numbers, position_to_shirt)
             result += permute_xy_with_subs(xy_objects["secondHalf"][team].xy, formation, shirt_numbers,
