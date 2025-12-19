@@ -11,9 +11,9 @@ This repository is a modified version of https://github.com/spoho-datascience/id
 Files created by our team:
 
 - `group_formations.py`: Functions for grouping player positional data into the planned formations (Taken from the `LineUp` parameter in the xml data).
-- `role_extraction.ipynb`: TODO.
-- `roles.py`: TODO.
-- `plot_data_by_formation.ipynb`: Visualize the results using the ETH color palette.
+- `roles.py`: Contains most of the logic for the methodology we presented. The main function is `extract_roles` which builds the occupancy matrix from the data, applies Gaussian smoothing to it, fits NMF on the occupancy matrix and returns the results.
+- `plot_data_by_formation.ipynb`: Visualize the results we presented. We display the player-role matrix (using the ETH color palette), the role basis matrices and we overlaid all roles in a single plot.
+- `role_extraction.ipynb`: A temporary notebook we used for development, which we used before implementing everything in `plot_data_by_formation.ipynb`.
 
 Files from the original repository:
 
