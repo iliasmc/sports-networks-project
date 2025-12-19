@@ -13,6 +13,7 @@ The algorithm:
    - B: basis matrix (defines the roles)
    - W: weight matrix (contribution of each role to each player)
 """
+from __future__ import annotations
 
 import numpy as np
 from scipy.ndimage import gaussian_filter
