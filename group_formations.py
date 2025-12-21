@@ -5,7 +5,7 @@ from queue import Queue
 from floodlight.io.dfl import read_position_data_xml
 from lxml import etree
 
-path = 'data/'
+DATA_PATH = 'data/'
 
 
 def get_lineups_and_title(match_info_file: str):
@@ -21,7 +21,7 @@ def get_lineups_and_title(match_info_file: str):
     away_lineup: str (e.g. "3-3-2-2")
     match_title: str (e.g. "1. FC Köln:FC Bayern München")
     """
-    tree = etree.parse(path + str(match_info_file))
+    tree = etree.parse(DATA_PATH + str(match_info_file))
     root = tree.getroot()
     teams = root.find("MatchInformation").find("Teams")
     home_id = root.find("MatchInformation").find("General").get("HomeTeamId")
@@ -151,15 +151,15 @@ def get_starting_players(players_dict):
 
 
 def get_xy_data_grouped_by_formation(include_subs=False):
-    info_files = [x for x in os.listdir(path) if "matchinformation" in x]
-    position_files = [x for x in os.listdir(path) if "positions_raw" in x]
+    info_files = [x for x in os.listdir(DATA_PATH) if "matchinformation" in x]
+    position_files = [x for x in os.listdir(DATA_PATH) if "positions_raw" in x]
 
     formations = defaultdict(list)
 
     for position_file, info_file in zip(position_files, info_files):
         home_formation, away_formation, match_title = get_lineups_and_title(info_file)
-        xy_objects, _, _, teamsheets, _ = read_position_data_xml(os.path.join(path, position_file),
-                                                                 os.path.join(path, info_file))
+        xy_objects, _, _, teamsheets, _ = read_position_data_xml(os.path.join(DATA_PATH, position_file),
+                                                                 os.path.join(DATA_PATH, info_file))
 
         xy_home = process_xy(xy_objects, teamsheets, match_title, home_formation, team="Home",
                              include_substitutes=include_subs)

@@ -2,9 +2,7 @@
 
 This repository is a modified version of https://github.com/spoho-datascience/idsse-data which was used for the paper:
 > Bassek, M., Rein, R., Weber, H., Memmert, D. (2025). An integrated dataset of
-> spatiotemporal and event data in elite soccer. *Scientific Data, 12*(1),
-
-195. https://doi.org/10.1038/s41597-025-04505-y
+> spatiotemporal and event data in elite soccer. *Scientific Data, 12*(1), 195. https://doi.org/10.1038/s41597-025-04505-y
 
 ## Project Structure
 
@@ -42,7 +40,8 @@ when using this dataset by
 ## Usage
 
 1. Download the raw data [here](https://doi.org/10.6084/m9.figshare.28196177)
-2. Open the `plot_data_by_formation.ipynb` notebook.
-3. Run the cells to load, process, and visualize the data. Note: Running the first cell (processing the data) will take about 2 minutes.
+2. Make sure to set the variable `DATA_PATH` in `group_formations.py` to the path where the downloaded data is located.
+3. Open the `plot_data_by_formation.ipynb` notebook.
+4. Run the cells to load, process, and visualize the data. Note: Running the first cell (processing the data) will take about 2 minutes.
 
 ---
